@@ -1,0 +1,1136 @@
+---
+title: "**Visualización de datos en R**<br><font color='#A8A8A8' size='5'>Primeros pasos con `ggplot2`</font>"
+author: "Semillero COBIFMAP · Marta Coronado Zamora"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  html_document:
+    theme: yeti
+    self_contained: true
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 4, fig.align = "center")
+library(ggplot2)
+```
+
+```{r font-awesome, echo=FALSE}
+# Iconos de Font Awesome incrustados en el HTML
+rmarkdown::html_dependency_font_awesome()
+```
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+## 1. Introducción
+
+La **visualización de datos** se refiere a las técnicas que usamos para
+comunicar datos o información codificándolos como objetos visuales (por
+ejemplo, puntos, líneas o barras) dentro de **gráficos**. Según
+[Friedman
+(2008)](https://www.smashingmagazine.com/2008/01/monday-inspiration-data-visualization-and-infographics/),
+el objetivo principal de la visualización de datos es **comunicar la
+información de forma clara** y **eficaz** mediante recursos gráficos.
+
+Según Friedman, esto no significa que una visualización tenga que ser
+***aburrida*** para ser funcional, ni extremadamente sofisticada para ser
+***bonita***. Para transmitir ideas de forma eficaz, la forma estética y
+la funcionalidad deben ir de la mano. Sin embargo, a menudo no se
+consigue el equilibrio entre forma y función, y se crean visualizaciones
+preciosas que no cumplen su objetivo principal: comunicar información
+([Friedman
+2008](https://www.smashingmagazine.com/2008/01/monday-inspiration-data-visualization-and-infographics/)).
+
+::: {style="background-color:#FFDAA1"}
+<i class="fa fa-key"></i> **Concepto clave**<br> Los gráficos son una
+herramienta excelente para explorar los datos y son imprescindibles para
+presentar resultados. Su objetivo principal es comunicar información a
+los usuarios de forma clara y eficiente. Son uno de los pasos del
+análisis de datos.
+:::
+
+Cada nueva visualización puede darnos **pistas** sobre nuestros datos.
+Parte de esta **información reveladora** puede que ya la conozcamos
+(aunque quizá todavía no la hayamos demostrado), mientras que otros
+aspectos pueden ser completamente nuevos. La figura siguiente representa
+el proceso de búsqueda de nuevas percepciones en los datos ([Aisch
+2019](https://interactivos.lanacion.com.ar/manual-data/entender_los_datos_7.html)).
+
+<center>
+
+<img src="img/dataviz2019_11_4D10_30_45.png" width="40%"/>
+
+</center>
+
+#### Objetivos de aprendizaje
+
+-   Aprender la gramática de gráficos de `ggplot2`
+
+-   Crear los gráficos más comunes (gráficos de dispersión, de líneas,
+    de barras, histogramas, diagramas de cajas...)
+
+-   Distinguir los indicadores de calidad de un gráfico
+
+    -   Integridad
+    -   *Chartjunk*
+    -   Proporción de tinta de datos
+
+-   Conocer las características de una representación gráfica eficaz
+
+### 1.1 Organización de la práctica
+
+En esta práctica vamos a usar
+[**RStudio**](https://posit.co/products/open-source/rstudio/), un
+entorno de desarrollo integrado (IDE) para R. R es un lenguaje de
+programación para el cálculo estadístico y los gráficos.
+
+<center>
+
+<img src="img/bandtwo2.png" width="80%"/>
+
+</center>
+
+El documento en el que estamos trabajando es un documento **R
+Markdown**. Los documentos R Markdown son totalmente reproducibles y
+permiten combinar texto, imágenes y código (en este caso, en lenguaje R).
+
+Para **convertir** (*renderizar*) un documento R Markdown en un archivo
+HTML, solo tienes que hacer clic en el botón `Knit` de la barra de
+RStudio. Este archivo HTML se puede compartir como un informe.
+
+No hace falta renderizar todo el documento cada vez que quieras ver el
+resultado de tu código. Puedes hacer clic en el botón
+`Run current chunk` (el triángulo verde de cada bloque de código) o usar
+el atajo de teclado `Ctrl`+`Alt`+`C`, y el resultado del código
+aparecerá debajo.
+
+<center>
+
+<img src="img/chunk2019_11_6D9_14_8.png" width="60%"/>
+
+</center>
+
+A lo largo del documento verás distintos iconos, que significan:
+
+<i class="fas fa-info-circle"></i>: información adicional o útil<br>
+<i class="fas fa-search"></i>: un ejemplo resuelto<br>
+<i class="fa fa-cogs"></i>: un ejercicio práctico<br>
+<i class="fas fa-comment-dots"></i>: un espacio para responder el
+ejercicio<br> <i class="fa fa-key"></i>: una pista para resolver un
+ejercicio<br> <i class="fa fa-rocket"></i>: un ejercicio más
+avanzado<br><br>
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+# 2. Instalación de las herramientas
+
+Tienes dos opciones para trabajar con R y RStudio:
+
+-   **Instalarlos en tu ordenador** (Windows, macOS o Linux), siguiendo
+    los apartados 2.1 y 2.2.
+-   **Usar RStudio en la nube** con [Posit Cloud](https://posit.cloud/),
+    sin instalar nada. Solo hay que registrarse (es gratuito), crear un
+    proyecto nuevo (`New Project` \> `New RStudio Project`) y subir el
+    archivo `practica-ggplot2.zip` con el botón `Upload` del panel
+    *Files*. Posit Cloud descomprime el zip automáticamente: tendrás este
+    documento y la carpeta `img` con las imágenes que necesita.
+
+## 2.1 Instalar R
+
+El lenguaje de programación R se puede descargar
+[aquí](https://cran.rediris.es/) y está disponible para Windows, Linux y
+macOS.
+
+## 2.2 Instalar RStudio
+
+RStudio se puede descargar
+[aquí](https://posit.co/download/rstudio-desktop/). Se instala
+fácilmente en Windows, Linux y macOS. Instala primero R y después
+RStudio.
+
+## 2.3 Instalar un paquete
+
+Los paquetes de R son colecciones de funciones y/o datos desarrolladas
+por la comunidad.
+
+Para instalar un paquete, usamos la función `install.packages()`,
+indicando entre comillas el nombre del paquete que queremos instalar.
+
+### 2.3.1 Instalar `ggplot2`
+
+`ggplot2` es un paquete de visualización de datos para el lenguaje de
+programación estadística R ([Wickham
+2009](https://www.springer.com/gp/book/9780387981413)). Lo creó Hadley
+Wickham implementando la gramática de gráficos (*Grammar of Graphics*)
+de Leland Wilkinson, un esquema general para la visualización de datos
+que divide los gráficos en componentes semánticos ([Wilkinson
+2010](https://onlinelibrary.wiley.com/doi/full/10.1002/wics.118)).
+
+Para instalar el paquete `ggplot2`, escribe en la consola:
+
+> `install.packages("ggplot2")`
+
+Solo hace falta instalar un paquete una vez en cada ordenador.
+
+## 2.4 Cargar un paquete
+
+Para cargar un paquete, usamos la función `library()`, indicando el
+nombre del paquete que queremos cargar. A diferencia de la instalación,
+hay que cargar el paquete cada vez que abrimos una sesión nueva de R.
+
+En el caso de `ggplot2`, escribirás:
+
+> `library("ggplot2")`
+
+¡Ya puedes empezar a crear gráficos!
+
+```{r example, echo = FALSE}
+# Simular datos
+set.seed(170513)
+n <- 5000
+d <- data.frame(a = rnorm(n))
+d$b <- .4 * (d$a + rnorm(n))
+
+# Calcular el primer componente principal
+d$pc <- predict(prcomp(~a+b, d))[,1]
+
+# Gráfico
+ggplot(d, aes(a, b, color = pc)) +
+  geom_point(shape = 16, size = 5, show.legend = FALSE, alpha = 0.4) +
+  theme_minimal() +
+  scale_color_gradient(low = "#0091FF", high = "#F0650E") + labs(x = "", y = "") +
+  scale_x_continuous(breaks = round(seq(-2,2, by = 1),0))
+```
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+# 3. Teoría de la visualización de datos
+
+Existe una teoría bien fundamentada sobre la visualización de datos
+([Ortiz 2014](https://tereom.github.io/est-computacional-2018/)). En
+este apartado destacamos la contribución pionera de **Edward Tufte**
+(1942--), estadístico estadounidense y profesor emérito de ciencias
+políticas, estadística e informática en la Universidad de Yale. Una de
+las ideas centrales de la obra de Tufte es **eliminar los elementos
+inútiles** de los gráficos, ya que distraen la atención de los elementos
+que explican los datos. Acuñó la palabra ***chartjunk*** («basura
+gráfica») para referirse a estos elementos inútiles, que no informan o
+que dificultan la lectura de la información ([Minguillón
+2016](http://openaccess.uoc.edu/webapps/o2/handle/10609/57624)). Por el
+contrario, definió la **excelencia** como la **comunicación de ideas
+complejas con claridad, precisión y eficiencia** ([Minguillón
+2016](http://openaccess.uoc.edu/webapps/o2/handle/10609/57624)).
+
+## 3.1 Indicadores de calidad de un gráfico
+
+Se pueden aplicar a cualquier gráfico. Son guías concretas y
+relativamente objetivas para evaluar la calidad de un gráfico ([Tufte,
+2001](https://www.edwardtufte.com/tufte/books_vdqi)).
+
+::: {style="background-color:#FFDAA1"}
+-   **Integridad gráfica**: lo fielmente que los elementos visuales
+    representan los datos. Hay que minimizar el factor de mentira
+    (cuánto se desvía el gráfico de los datos reales).
+-   ***Chartjunk***: minimizar la decoración gráfica que interfiere en
+    la interpretación de los datos: efecto 3D, tramas...
+-   **Proporción de tinta de datos**: maximizar la tinta que representa
+    datos respecto a la tinta total usada para imprimir el gráfico.
+:::
+
+### 3.1.1 Factor de mentira, *chartjunk* y gráficos de sectores
+
+<center>
+
+<img src="img/pies2019_11_4D11_52_30.jpg" style="padding: 0 15px; float: right;" width="25%"/>
+
+</center>
+
+El **factor de mentira** es el cociente entre el tamaño de un efecto
+tal como se muestra en el gráfico y el tamaño del efecto en los datos.
+Idealmente, el factor de mentira debería ser 1 (sin distorsión).
+
+El ***chartjunk*** es cualquier elemento visual innecesario o confuso
+que no hace falta para entender la información del gráfico, o que
+distrae a quien lo mira.
+
+Un diseño popular que se considera *chartjunk* e introduce factores de
+mentira es el **gráfico de sectores en 3D**. En la figura vemos cómo el
+sector C parece más grande que el B, aunque no lo es (factor de
+mentira). El motivo es la perspectiva, que crea una variación que no se
+corresponde con ninguna variación en los datos (*chartjunk*).
+
+Si quitamos el efecto 3D, el factor de mentira se reduce, pero todavía
+hay elementos que se pueden mejorar: la relación entre el color, la
+cantidad y la categoría. Podemos añadir etiquetas, como en la serie de
+la derecha, pero entonces, ¿por qué no mostrar simplemente los datos en
+una tabla? ¿Qué aporta el gráfico de sectores a la interpretación? Y
+sería aún más difícil de leer si, por ejemplo, añadiéramos más
+categorías.
+
+### 3.1.2 Proporción de tinta de datos
+
+Maximizar la proporción de **tinta de datos** en nuestros gráficos tiene
+beneficios inmediatos. La regla es: **si hay tinta que no representa
+variación en los datos, o si al eliminarla no se pierde significado, esa
+tinta debe eliminarse**.
+
+$$ \text{Proporción de tinta de datos} = \frac{\text{Tinta que representa datos}}{\text{Tinta total usada para imprimir el gráfico}} $$
+
+Según el principio de Tufte, ante todo hay que mostrar los datos, así
+que todo lo que no aporte información debe eliminarse (incluido el color
+de fondo, los bordes, las cuadrículas...).
+
+<center>
+
+<img src="img/data2ink2019_11_4D11_52_18.jpg" width="80%"/>
+
+</center>
+
+## 3.2 Características de una representación gráfica eficaz
+
+Como hemos visto, Tufte definió la excelencia en la visualización de
+datos como comunicar ideas complejas con claridad, precisión y
+eficiencia. Una buena visualización debería:
+
+-   Mostrar los datos
+-   Hacer que quien la mira piense en el contenido, y no en la
+    metodología, el diseño gráfico, la tecnología usada para producirla
+    u otra cosa
+-   Evitar distorsionar lo que dicen los datos (usar ejes justos, evitar
+    más de un eje `y`)
+-   Presentar muchos números en poco espacio
+-   Dar coherencia a conjuntos de datos grandes
+-   Animar a la vista a comparar distintos datos
+-   Mostrar los datos a distintos niveles de detalle, desde una visión
+    general hasta la estructura fina
+-   Tener un propósito razonablemente claro: descripción, exploración,
+    tabulación o decoración
+-   Estar estrechamente integrada con las descripciones estadísticas y
+    verbales de los datos
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+# 4. La gramática de gráficos
+
+En un idioma, hay una serie de reglas que organizan las palabras en
+frases: la gramática. [Wilkinson
+(2005)](https://www.springer.com/gp/book/9780387245447) creó una
+gramática de gráficos que nos da los elementos básicos para
+construirlos.
+
+Los **componentes** (o capas) de la gramática de gráficos son:
+
+-   Los **datos** que quieres visualizar
+-   Un conjunto de **correspondencias estéticas** (`aes`, de
+    *aesthetics*) que describen cómo se asignan las variables de los
+    datos a atributos visuales que podemos percibir (posición, color,
+    tamaño...)
+-   Las **escalas**, que traducen los valores de los datos a valores del
+    espacio estético (un color, un tamaño o una forma). Las escalas
+    dibujan la leyenda y los ejes, que permiten hacer el camino inverso
+    y leer los valores originales en el gráfico
+-   Las **transformaciones estadísticas** (`stat`), que resumen los
+    datos de muchas formas útiles. Por ejemplo, agrupar y contar
+    observaciones para crear un histograma, o resumir una relación entre
+    dos variables con un modelo lineal
+-   Los **objetos geométricos** (`geom`), que representan lo que vemos
+    en el gráfico: puntos, líneas, polígonos, etc.
+-   Un **sistema de coordenadas** (`coord`), que describe cómo se
+    sitúan las coordenadas de los datos en el plano del gráfico.
+    También proporciona los ejes y las líneas de la cuadrícula para
+    poder leerlo. Normalmente usamos coordenadas cartesianas, pero hay
+    otras, como las coordenadas polares o las proyecciones de mapas
+-   Las **facetas** (*faceting*), que describen cómo dividir los datos
+    en subconjuntos y mostrarlos como pequeños gráficos múltiples
+
+<center>
+
+<img src="img/ggplot2layers2019_8_10D11_28_23.png" width="80%"/>
+
+</center>
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+# 5. Primeros pasos con `ggplot2`
+
+Los siguientes ejemplos te guiarán por los componentes básicos de la
+gramática de `ggplot2`. Usan datos del paquete `datasets`, que ya está
+cargado por defecto en la sesión de `R`, y algunos conjuntos de datos
+que se cargan con el paquete `ggplot2`. `ggplot2` necesita que los datos
+estén guardados en **data frames** y en **formato ordenado** (*tidy*: una
+observación por fila y una variable por columna):
+
+```{r}
+head(iris)
+class(iris)
+```
+
+------------------------------------------------------------------------
+
+## <i class="fas fa-search"></i> Ejemplo 1 \| Crear un gráfico de dispersión
+
+### **1a** \| Gráfico de dispersión básico
+
+En este primer problema queremos representar la **relación** entre las
+variables `Sepal.Width` (anchura del sépalo) y `Sepal.Length` (longitud
+del sépalo) del data frame `iris`. Este data frame es una colección de
+datos que cuantifica la variación morfológica de las **flores de lirio**
+(*Iris*) de tres especies emparentadas (*setosa*, *versicolor* y
+*virginica*).
+
+<center>
+
+<img src="img/1_Hh53mOF4Xy4eORjLilKOwA.png" width="80%"/>
+
+</center>
+
+::: {style="background-color:#FFDAA1"}
+<i class="fas fa-info-circle"></i> Este famoso conjunto de datos `iris`
+(de Fisher o de Anderson) contiene las medidas en centímetros de la
+longitud y la anchura del sépalo y del pétalo de 50 flores de cada una
+de las 3 especies de lirio. Puedes escribir `??iris` en la consola de
+`R` para leer una descripción de los datos.
+:::
+
+Para representar cualquier gráfico en `ggplot2` necesitamos dos
+funciones básicas, que se combinan con el signo `+`:
+
+```{r scatter-ggplot2}
+ggplot(data = iris, mapping = aes(x = Sepal.Width, y = Sepal.Length)) +
+  geom_point()
+```
+
+Las variables que queremos representar van dentro de la función
+`aes()`, que especifica la ***correspondencia*** entre las variables y
+los ***atributos estéticos*** (en este caso, las posiciones en el
+espacio, `x` e `y`). Llamamos a las variables directamente por su
+nombre, porque también le pasamos el data frame entero con el argumento
+`data`, así que `ggplot` sabe de dónde sacarlas. Por último, añadimos el
+***objeto geométrico*** que queremos representar: en este caso, puntos.
+
+### **1b** \| Representar más variables
+
+Otra variable de los datos indica la especie (`Species`) de cada flor.
+Hay tres especies: *setosa*, *versicolor* y *virginica*.
+
+```{r table-species}
+table(iris$Species)
+```
+
+Supongamos que queremos representar cada especie con un color distinto.
+En este caso queremos usar `Species` como **variable categórica**, es
+decir, como factor. Esta variable ya es un factor por defecto:
+
+```{r check-class}
+class(iris$Species)
+```
+
+Usamos `Species` en el atributo estético `colour` (color):
+
+```{r groups-ggplot2}
+ggplot(data = iris, mapping = aes(x = Sepal.Width, y = Sepal.Length, colour = Species)) +
+  geom_point()
+```
+
+::: {style="background-color:#FFDAA1"}
+<i class="fas fa-info-circle"></i> Fíjate en que `ggplot` añade por
+defecto una **leyenda** para todas las variables que se han asignado a
+algún atributo estético. Así podemos leer todas las variables sin
+esfuerzo adicional.
+:::
+
+### <i class="fa fa-cogs"></i> Ejercicio
+
+Prueba a asignar `Species` a otro atributo estético en lugar de
+`colour`, como `shape` (forma), `size` (tamaño) o `alpha`
+(transparencia). ¿Te aparece algún mensaje de aviso? ¿Por qué?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer1.1}
+
+```
+:::
+
+------------------------------------------------------------------------
+
+## <i class="fas fa-search"></i> **Ejemplo 2** \| Crear un gráfico de barras
+
+En este segundo ejercicio vamos a usar el conjunto de datos `mtcars`,
+que contiene información sobre el **consumo de combustible y 10 aspectos
+del diseño y el rendimiento de 32 automóviles**.
+
+```{r}
+head(mtcars)
+class(mtcars)
+```
+
+::: {style="background-color:#FFDAA1"}
+<i class="fas fa-info-circle"></i> Los datos proceden de la revista
+estadounidense Motor Trend de 1974 e incluyen el consumo de combustible
+y 10 aspectos del diseño y el rendimiento de 32 automóviles (modelos de
+1973--74). Puedes escribir `??mtcars` en la consola de `R` para leer una
+descripción de los datos.
+:::
+
+Una de las variables de interés indica el número de cilindros del motor
+(`cyl`). Hay coches con 4, 6 u 8 cilindros.
+
+### **2a** \| Gráfico de barras básico
+
+Queremos resumir estos datos en un **gráfico de barras** sencillo que
+represente el número de coches de cada categoría de cilindros; es decir,
+cuántos coches tienen 4, 6 u 8 cilindros. Sin embargo, el número de
+coches con 4 cilindros, por ejemplo, no es un dato que aparezca en la
+tabla. Para saberlo habría que contar las filas en las que `cyl = 4`, y
+no vamos a hacerlo a mano <i class="fas fa-smile-wink"></i>.
+
+`ggplot2` es capaz de hacer operaciones de resumen sencillas con las
+variables, que llamamos **transformaciones estadísticas**. Una de ellas
+es contar cuántas veces aparece cada valor de una variable, que es
+justamente lo que queremos. Y la función `geom_bar` usa por defecto la
+transformación estadística `count` (contar) sobre la variable asignada
+al eje `x`.
+
+Lo primero que vamos a hacer es comprobar el tipo de la variable `cyl`:
+
+```{r class-cyl}
+# Primero comprobamos el tipo de cyl
+class(mtcars$cyl)
+```
+
+Vemos que es una variable numérica. En este caso queremos usar `cyl`
+como variable categórica, para distinguir grupos y no para indicar un
+valor en una escala numérica continua. Para ello, tenemos que cambiar su
+tipo antes de dársela a `ggplot`, con la función `as.factor()`.
+
+```{r factor-cyl}
+# Creamos una nueva variable en el data frame, cyl_f, que es cyl convertida en factor
+mtcars$cyl_f <- as.factor(mtcars$cyl)
+```
+
+Ahora ya podemos crear el gráfico de barras:
+
+```{r barplot-ggplot2}
+ggplot(data = mtcars, mapping = aes(x = cyl_f)) +
+  geom_bar()
+```
+
+Imagina que ya tuviéramos una tabla con el número de coches de cada
+categoría de cilindros. Si tuviéramos un data frame ya calculado con
+`cyl` y `number_of_cars`, podríamos pasar la variable `number_of_cars` a
+la función `geom_col` en lugar de `geom_bar`; `geom_col` usa por defecto
+las variables asignadas a `x` e `y` sin transformarlas.
+
+```{r barplot-table}
+# Creamos el data frame
+counts_by_cyl_data_frame <- as.data.frame(table(mtcars$cyl))
+names(counts_by_cyl_data_frame) <- c("cyl", "number_of_cars")
+
+# Vemos el data frame
+counts_by_cyl_data_frame
+
+# Nuevo gráfico con geom_col
+ggplot(data = counts_by_cyl_data_frame, mapping = aes(x = cyl, y = number_of_cars)) +
+  geom_col()
+```
+
+::: {style="background-color:#FFDAA1"}
+<i class="fas fa-hand-point-up"></i> Usaremos `geom_bar` si los datos no
+están procesados y necesitamos contar cuántas veces aparece cada
+categoría. Si ya tenemos los recuentos calculados, usaremos `geom_col`.
+:::
+
+### **2b** \| Grupos y posición
+
+En el ejemplo del gráfico de dispersión hemos visto cómo representar con
+colores los grupos codificados en otras variables. Ahora queremos
+mostrar en el gráfico de barras el tipo de transmisión (`am`), además
+del número de cilindros. Podemos asignar `am` al color de relleno de las
+barras, `fill` (el atributo `colour` cambiaría el borde de los
+rectángulos). Hay dos tipos de transmisión: `0` para los coches
+automáticos y `1` para los manuales.
+
+```{r groups-bar}
+# Primero comprobamos el tipo de la variable
+class(mtcars$am)
+
+# Convertimos am en factor y cambiamos la notación 0/1 por otra más informativa: automático/manual
+mtcars$am_f <- factor(mtcars$am, levels = c(0, 1), labels = c("automático", "manual"))
+
+# Gráfico
+ggplot(data = mtcars, mapping = aes(x = cyl_f, fill = am_f)) +
+  geom_bar()
+```
+
+Cada objeto geométrico de `ggplot2` tiene también un argumento
+**position** (posición) que controla cómo se colocan los grupos. En
+`geom_bar`, la posición por defecto es apilar los grupos. Podemos
+cambiarla para ponerlos uno al lado del otro con `position = "dodge"`.
+
+```{r position-bar-ggplot2}
+ggplot(data = mtcars, mapping = aes(x = cyl_f, fill = am_f)) +
+  geom_bar(position = "dodge")
+```
+
+### <i class="fa fa-cogs"></i> Ejercicio
+
+Modifica el gráfico anterior usando la posición `"fill"` en lugar de
+`"dodge"`. ¿Qué hace?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer2.1}
+
+```
+:::
+
+Modifica el gráfico anterior para agrupar por la variable `gear` en
+lugar de por el tipo de transmisión (`am_f`). La variable `gear` es el
+número de marchas hacia delante: los coches pueden tener 3, 4 o 5
+marchas. Comprueba si hace falta transformar `gear` en un factor.
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer2.2}
+
+```
+:::
+
+------------------------------------------------------------------------
+
+## <i class="fas fa-search"></i> **Ejemplo 3** \| Mostrar la distribución de una variable: histogramas
+
+### **3a** \| Histograma sencillo
+
+Ahora tenemos un conjunto de datos nuevo llamado `diamonds` y
+necesitamos entender la distribución de algunas de sus variables
+continuas. Un buen punto de partida es un histograma, que representa
+con barras el número de observaciones en distintos intervalos.
+
+```{r}
+head(diamonds)
+class(diamonds)
+```
+
+::: {style="background-color:#FFDAA1"}
+<i class="fas fa-info-circle"></i> `diamonds` es un conjunto de datos
+con el precio y otros atributos de casi 54.000 diamantes. Puedes
+escribir `??diamonds` en la consola de `R` para leer una descripción de
+los datos.
+:::
+
+La función que necesitamos se llama `geom_histogram()` y usa por defecto
+la transformación estadística `bin`. En este caso, `bin` divide la
+variable asignada a `x` en intervalos y cuenta el número de valores en
+cada uno. La anchura de los intervalos se controla con el argumento
+`binwidth`. En este ejemplo mostramos la distribución del peso de los
+diamantes (`carat`, en quilates).
+
+```{r histogram}
+ggplot(data = diamonds, mapping = aes(x = carat)) +
+  geom_histogram(binwidth = 0.3)
+```
+
+::: {style="background-color:#FFDAA1"}
+<i class="fas fa-info-circle"></i> Fíjate en que los histogramas
+representan variables *continuas*, mientras que los gráficos de barras
+representan variables *discretas*, aunque a veces se
+[confunden](https://www.google.com/search?q=diferencia+histograma+gr%C3%A1fico+de+barras).
+:::
+
+### **3b** \| Varios histogramas
+
+El conjunto de datos `diamonds` contiene más información sobre los
+diamantes, como la calidad del corte (`cut`) o el color (`color`). Para
+ver la distribución del peso según el corte, podemos asignar `cut` al
+relleno (`fill`):
+
+```{r histogram-fill}
+ggplot(data = diamonds, mapping = aes(x = carat, fill = cut)) +
+  geom_histogram(binwidth = 0.3)
+```
+
+Los histogramas apilados son difíciles de interpretar. Podemos usar otra
+posición en lugar de la posición por defecto, «apilada» (`"stack"`). Por
+ejemplo, `position = "dodge"`.
+
+```{r histogram-dodge}
+ggplot(data = diamonds, mapping = aes(x = carat, fill = cut)) +
+  geom_histogram(position = "dodge", binwidth = 0.3)
+```
+
+Pero hay una opción todavía mejor. `ggplot2` permite crear de forma
+sencilla pequeños gráficos múltiples, o **facetas**, con la función
+`facet_grid`:
+
+```{r facets}
+ggplot(data = diamonds, mapping = aes(x = carat, fill = cut)) +
+  geom_histogram(position = "dodge", binwidth = 0.3) +
+  facet_grid(cut ~ .)
+```
+
+### <i class="fa fa-cogs"></i> Ejercicio
+
+¿Qué pasa si cambias el orden de los elementos de `facet_grid`, es
+decir, `(. ~ cut)`?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer3.1}
+
+```
+:::
+
+¿Cuál es la mejor disposición de los subgráficos para comparar las
+distribuciones? ¿Por qué?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+:::
+
+------------------------------------------------------------------------
+
+## <i class="fas fa-search"></i> **Ejemplo 4** \| Mostrar la distribución de una variable: diagrama de cajas
+
+### **4a** \| Diagrama de cajas sencillo
+
+Otra forma de mostrar la distribución de datos numéricos es un diagrama
+de cajas (*boxplot*). Permite ver mejor la asimetría, ya que muestra los
+cuartiles y la mediana de los datos. También muestra los valores
+atípicos como puntos separados.
+
+La función que vamos a usar es `geom_boxplot()`. En este ejemplo
+mostramos la distribución del peso de los diamantes (`carat`).
+
+```{r boxplot}
+ggplot(data = diamonds, mapping = aes(y = carat)) +
+  geom_boxplot()
+```
+
+Una característica de los diagramas de cajas es que permiten mostrar la
+distribución de una variable (`carat`) según otra variable categórica.
+Por ejemplo, podemos mostrar la distribución de `carat` según el color
+del diamante (`color`).
+
+```{r boxplot2}
+ggplot(data = diamonds, mapping = aes(y = carat, x = color)) +
+  geom_boxplot()
+```
+
+### <i class="fa fa-cogs"></i> Ejercicio
+
+Prueba a rellenar de color las cajas. ¿Cómo lo harías?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer4.1}
+
+```
+:::
+
+------------------------------------------------------------------------
+
+## <i class="fas fa-search"></i> **Ejemplo 5** \| Personalizar un gráfico
+
+### **5a** \| Cambiar los colores
+
+Hasta ahora hemos usado las **paletas de colores por defecto** en todos
+los gráficos. Puede que necesitemos cambiarlas para que sean accesibles
+para las **personas con daltonismo**, para que coincidan con los colores
+de nuestro proyecto o para darles un **significado** (p. ej., rojo para
+los valores positivos y azul para los negativos). Podemos controlar con
+exactitud cómo se asigna una variable a un atributo estético con las
+funciones `scale_*`.
+
+En el siguiente ejemplo fijamos a mano el color de los cinco tipos de
+calidad del corte de los diamantes. Puedes usar otros nombres de colores
+consultando esta [guía de colores de
+R](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf).
+
+```{r change-col-ggplot2}
+ggplot(data = diamonds, mapping = aes(x = carat, fill = cut)) +
+  geom_histogram(position = "dodge", binwidth = 0.3) +
+  facet_grid(cut ~ .) +
+  scale_fill_manual(values = c("sienna1", "orange", "lightseagreen", "orangered", "red4"))
+```
+
+::: {style="background-color:#FFDAA1"}
+<i class="fas fa-info-circle"></i> Fíjate en que las funciones de escala
+cambian a la vez los colores del gráfico y los de la leyenda.
+:::
+
+### **5b** \| Cambiar (o añadir) los títulos de los ejes, la leyenda y el gráfico
+
+Puede que también necesitemos añadir un **título** al gráfico o cambiar
+los **títulos de los ejes**. Hay varias opciones:
+
+-   En `ggplot2`, los títulos de los ejes y de la leyenda se pueden
+    indicar con el argumento `name` dentro de una función `scale_*`
+-   El título del gráfico se puede cambiar con `+ ggtitle("Título")`
+-   También puedes usar la función `labs()`: con `fill = ""` cambias el
+    título de la leyenda y con `title = ""`, el título del gráfico
+
+Mira el ejemplo:
+
+```{r titles-ggplot2}
+# Guardamos la parte común del gráfico en una variable y después podemos añadir más componentes con el signo "+"
+p <- ggplot(data = diamonds, mapping = aes(x = carat, fill = cut)) +
+  geom_histogram(position = "dodge", binwidth = 0.3) +
+  facet_grid(cut ~ .)
+
+# Opción A:
+p + scale_fill_manual(values = c("sienna1", "orange", "lightseagreen", "orangered", "red4"), name = "Calidad") +
+  scale_x_continuous(name = "Peso del diamante (quilates)") +
+  ggtitle("Variación del peso de los diamantes")
+
+# Opción B:
+# p + scale_fill_manual(values = c("sienna1", "orange", "lightseagreen", "orangered", "red4")) +
+#   labs(title = "Variación del peso de los diamantes", x = "Peso del diamante (quilates)", fill = "Calidad")
+```
+
+### **5c** \| Cambiar el tema
+
+El aspecto de los gráficos de `ggplot2` se controla con los **temas**
+(*themes*). El tema por defecto de `ggplot2` tiene el fondo gris y
+«está diseñado para dar protagonismo a los datos y facilitar las
+comparaciones». Puedes cambiar el aspecto general eligiendo otro tema
+con las funciones `theme_*`. Hay [ocho temas
+distintos](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+disponibles. El siguiente ejemplo usa el tema «blanco y negro»
+(`theme_bw()`):
+
+```{r theme}
+ggplot(data = diamonds, mapping = aes(x = carat, fill = cut)) +
+  geom_histogram(position = "dodge", binwidth = 0.3) +
+  facet_grid(cut ~ .) +
+  scale_fill_manual(values = c("sienna1", "orange", "lightseagreen", "orangered", "red4"), name = "Calidad") +
+  scale_x_continuous(name = "Peso del diamante (quilates)") +
+  ggtitle("Variación del peso de los diamantes") +
+  theme_bw()
+```
+
+### <i class="fas fa-cogs"></i> Ejercicio
+
+Con el código siguiente, prueba otras funciones `scale_fill_*` de
+`ggplot2` con paletas predefinidas, como `scale_fill_hue()`,
+`scale_fill_brewer()`, `scale_fill_viridis_d()` (la que se usa por
+defecto) y `scale_fill_grey()`. ¿Qué paleta usarías para asegurarte de
+que las personas con daltonismo distinguen los colores,
+`scale_fill_hue()` o `scale_fill_viridis_d()`?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer5.1}
+
+```
+:::
+
+Prueba los argumentos `subtitle = ""`, `caption = ""` y `tag = ""` de la
+función `labs()`. ¿Para qué sirven?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer5.2}
+
+```
+:::
+
+De los [ocho temas
+disponibles](https://ggplot2.tidyverse.org/reference/ggtheme.html), ¿cuál
+crees que maximiza la proporción de tinta de datos?
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer5.3}
+
+```
+:::
+
+------------------------------------------------------------------------
+
+## <i class="fas fa-info-circle"></i> Guardar los gráficos
+
+Hay varias formas de guardar un gráfico en un archivo. Aquí tienes dos
+ejemplos:
+
+A. El botón `Export` del panel de gráficos (*Plots*) de `RStudio`:
+
+![](img/save2020_11_7D8_34_30.png)
+
+B. La función `ggsave` del paquete `ggplot2`:
+
+```{r ggsave, eval = FALSE}
+
+p <- ggplot(data = iris, mapping = aes(x = Sepal.Width, y = Sepal.Length)) + geom_point()
+
+ggsave(filename = "grafico.png", plot = p, width = 6, height = 4) # En pulgadas por defecto
+```
+
+Los gráficos se pueden guardar en distintos formatos de imagen. La
+opción **A** te ofrece los formatos en una lista desplegable (PNG,
+JPG...), y la opción **B** deduce el formato a partir de la extensión
+del nombre del archivo (p. ej. `grafico.png` o `grafico.pdf`).
+
+Los principales formatos se pueden clasificar en:
+
+-   Formatos de mapa de bits (*raster*), en los que la información se
+    guarda en píxeles y tienen una resolución máxima.
+
+    -   **PNG**: extensión .png, admite fondo transparente, buena
+        compresión, no pierde calidad
+    -   **JPEG**: extensiones .jpg y .jpeg, muy buena compresión, se usa
+        en fotografía personal, pero pierde calidad con cada
+        modificación
+    -   **TIFF**: extensiones .tif y .tiff, formato preferido para la
+        impresión profesional
+
+-   Formatos vectoriales, en los que la información se codifica en
+    formas geométricas que se pueden mostrar a cualquier tamaño sin
+    perder resolución.
+
+    -   **SVG**: extensión .svg, el estándar de los gráficos
+        vectoriales; necesita el paquete `svglite`
+
+-   Híbridos
+
+    -   **PDF**: puede contener tanto gráficos vectoriales como imágenes
+        de mapa de bits
+
+### <i class="fas fa-cogs"></i> Ejercicio
+
+Guarda el gráfico `p` en un formato de mapa de bits y en uno vectorial,
+con el mismo tamaño, usando `ggsave()` (p. ej.: `width = 6, height = 4`).
+¿Qué diferencias observas al ampliarlos?
+
+<i class="fas fa-info-circle"></i> Nota: para guardar en SVG necesitas el
+paquete `svglite` de R (y, en Linux, algunas librerías del sistema).
+¡Sáltate el ejercicio si te da error!
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r answer6.1}
+
+```
+:::
+
+------------------------------------------------------------------------
+
+## <i class="fa fa-cogs"></i> Ejercicio de recapitulación
+
+Si para representar un gráfico de dispersión usamos `geom_point()` y
+para un gráfico de barras `geom_bar()`... ¿te imaginas cómo representar
+un gráfico de **líneas** con la sintaxis de `ggplot2`?
+
+-   Representa cómo cambia la variable `unemploy` (número de personas
+    desempleadas, en miles) a lo largo del tiempo (variable `date`) del
+    conjunto de datos `economics` con un gráfico de líneas, usando la
+    sintaxis de `ggplot2`
+-   Cambia los nombres de los ejes y añade un título
+-   Usa un tema
+-   Guarda el gráfico en un archivo con un formato de mapa de bits (png)
+
+::: {style="background-color:#F0F0F0"}
+##### <i class="fas fa-comment-dots"></i> Respuesta:
+
+```{r wrap-exercise-line-plot}
+
+```
+:::
+
+<i class="fa fa-key"></i> La imagen final debería parecerse a esta:
+
+<center>
+
+<img src="img/plot2019_11_5D10_50_1.png" width="50%"/>
+
+</center>
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+# <i class="fa fa-cogs"></i> ¡Intenta reproducir un gráfico!
+
+Elige uno de los gráficos siguientes. Con lo que has aprendido de
+`ggplot2`, intenta escribir el código que reproduce la misma figura.
+Tienes el nombre del conjunto de datos y la paleta de colores (u otras
+pistas).
+
+| Nº | Conjunto de datos | Descripción | Pista |
+|----|-------------------|-------------|-------|
+| 1  | `Titanic`      | Supervivencia de los pasajeros del Titanic | `Titanic` no es un data frame sino una tabla: conviértela con `as.data.frame(Titanic)` y usa la columna `Freq` con `geom_col()`. La paleta de colores es: "#79AEB2", "#4A6274" |
+| 2  | `ToothGrowth`  | Efecto de la vitamina C en el crecimiento de los dientes de cobayas | La paleta de colores es: "#58A6A6", "#EFA355" |
+| 3  | `msleep`       | Versión actualizada y ampliada del conjunto de datos sobre el sueño de los mamíferos | Puedes colorear en gris los valores NA dentro de la escala de relleno (`na.value = "grey80"`) |
+| 4  | `mpg`          | Consumo de combustible de 38 modelos de coche populares, de 1999 y 2008 | La paleta de colores es: "#4CC3CD", "#FEE883" |
+| 5  | `midwest`      | Datos demográficos del Medio Oeste de EE. UU. | Se combinan dos atributos estéticos dentro de `geom_point()`: el color y el tamaño |
+| 6  | `diamonds`     | Precios de unos 54.000 diamantes de talla redonda | Se usa la paleta viridis |
+| 7  | `HairEyeColor` | Color del pelo y de los ojos de estudiantes de estadística | `HairEyeColor` no es un data frame sino una tabla: conviértela con `as.data.frame(HairEyeColor)` y usa la columna `Freq` con `geom_col()`. La paleta de colores es: "#58A6A6", "#EFA355" |
+| 8  | `infert`       | Infertilidad tras un aborto espontáneo o inducido | La paleta de colores es: "#900C3F", "#C70039", "#FF5733" |
+
+<a href="img/titanic2020_11_7D10_3_14.png" target="new">
+<img src="img/titanic2020_11_7D10_3_14.png" alt="Titanic" width="30%"/>
+</a><a href="img/toothGrowth2020_11_7D10_6_32.png" target="new">
+<img src="img/toothGrowth2020_11_7D10_6_32.png" alt="ToothGrowth" width="30%"/>
+</a><a href="img/msleep2020_11_7D10_9_41.png" target="new">
+<img src="img/msleep2020_11_7D10_9_41.png" alt="msleep" width="30%"/>
+</a>
+<a href="img/mpg2020_11_7D10_10_11.png" target="new">
+<img src="img/mpg2020_11_7D10_10_11.png" alt="mpg" width="30%"/>
+</a><a href="img/midwest2020_11_7D10_10_38.png" target="new">
+<img src="img/midwest2020_11_7D10_10_38.png" alt="midwest" width="30%"/>
+</a>
+<a href="img/diamonds2020_11_7D10_11_9.png" target="new">
+<img src="img/diamonds2020_11_7D10_11_9.png" alt="diamonds" width="30%"/>
+</a><a href="img/HairEyeColor2020_11_7D10_11_42.png" target="new">
+<img src="img/HairEyeColor2020_11_7D10_11_42.png" alt="HairEyeColor" width="30%"/>
+</a>
+<a href="img/infert2020_11_7D10_11_54.png" target="new">
+<img src="img/infert2020_11_7D10_11_54.png" alt="infert" width="30%"/>
+</a>
+
+```{r reproducing-ggplot2}
+
+```
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+# <i class="fa fa-rocket"></i> Analiza datos científicos reales
+
+Para practicar con datos reales, puedes elegir entre 7 conjuntos de
+datos. Haz una representación de los datos que tenga sentido. Para cada
+uno tienes el artículo científico correspondiente y una breve
+descripción que te puede ayudar.
+
+Datos de: Whitlock, Michael C, y Dolph Schluter. 2020. *The Analysis of
+Biological Data*. Tercera edición.
+
+### 1. El virus del Zika y el tamaño de la cabeza
+
+El virus del Zika se puede transmitir por mosquitos, por vía sexual o de
+la madre al feto. En 2015 hubo un brote en Brasil que se extendió a
+otros países de América. En los recién nacidos de madres infectadas se
+observó con frecuencia un tamaño pequeño de la cabeza (microcefalia),
+asociado a un desarrollo anormal del cerebro. Estos datos son medidas de
+la cabeza de fetos de mujeres embarazadas infectadas por el Zika,
+tomadas por ecografía entre las semanas 33 y 36 de gestación. A esta
+edad, un tamaño de la cabeza de entre 80 y 94 mm se considera normal en
+madres no infectadas.
+
+Enlace a los datos:
+<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02e2bZikaBiparietalDiameter.csv>
+
+-   [Lee el estudio](https://www.nejm.org/doi/full/10.1056/nejmoa1602412)
+
+### 2. Vivir a gran altitud
+
+Vivir a gran altitud supone retos fisiológicos por la menor
+disponibilidad de oxígeno. Las poblaciones humanas de los Andes,
+Etiopía y el Tíbet se han enfrentado a estos retos y se han adaptado. Un
+posible mecanismo de adaptación es aumentar el contenido de hemoglobina
+de la sangre para captar más oxígeno. Beall et al. midieron el contenido
+de hemoglobina de personas de estas tres poblaciones y de un grupo
+control de hombres que viven al nivel del mar en EE. UU.
+
+Enlace a los datos:
+<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02e3bHumanHemoglobinElevation.csv>
+
+-   [Lee el estudio](https://www.pnas.org/doi/10.1073/pnas.252649199)
+
+### 3. ¡No vayas hacia la luz!
+
+El estudio encontró que las poblaciones de polillas de zonas urbanas,
+con décadas de contaminación lumínica, se sienten mucho menos atraídas
+por la luz que las polillas de zonas sin contaminación lumínica. Esto
+sugiere una adaptación evolutiva a la luz artificial nocturna.
+
+Enlace a los datos:
+<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02q15MothsToLight.csv>
+
+-   [Lee el estudio](https://royalsocietypublishing.org/doi/10.1098/rsbl.2016.0111)
+
+### 4. Oír colores
+
+Algunas personas perciben uno de sus sentidos a través de otro. Por
+ejemplo, pueden oír el nombre «Bob» y ver el color gris. Saenz y Koch
+querían ver cómo influye este tipo de percepción en la capacidad de
+realizar tareas multisensoriales complejas. Para ello compararon a
+personas con este tipo de percepción (llamadas sinestésicas) con un
+grupo de personas sin ella, en una prueba con patrones rítmicos
+temporales parecidos al código Morse.
+
+Enlace a los datos:
+<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02q10Synesthetes.csv>
+
+-   [Lee el estudio](https://www.sciencedirect.com/science/article/pii/S0960982208007343)
+
+### 5. ¿Comer menos para vivir más?
+
+Por algún motivo, restringir la ingesta de comida suele aumentar la
+esperanza de vida. Para comprobarlo, Mattison et al. alimentaron a 17
+macacos rhesus (7 hembras y 10 machos) con una dieta reducida al 30 % de
+la nutrición normal, y a otros 17 macacos (8 hembras y 9 machos) con una
+dieta nutritiva normal.
+
+Enlace a los datos:
+<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02q35FoodReductionLifespan.csv>
+
+-   [Lee el estudio](https://www.nature.com/articles/nature11432)
+
+### 6. ¿Un gen de la monogamia?
+
+El gen del receptor de vasopresina V1a se expresa más en el prosencéfalo
+de las especies de topillo monógamas que en las promiscuas. Para ver si
+la expresión de este gen influye en la monogamia, Lim et al. aumentaron
+experimentalmente la expresión de V1a en el prosencéfalo de 11 machos
+de topillo de pradera (una especie solitaria y promiscua), y compararon
+el porcentaje de tiempo que estos machos y los machos control pasaban
+acurrucados junto a una hembra (como medida de monogamia).
+
+Enlace a los datos:
+<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap03q15VasopressinVoles.csv>
+
+-   [Lee el estudio](https://www.nature.com/articles/nature02539)
+
+### 7. Correr con menos peso
+
+Los machos de las arañas del género *Tidarren* son diminutos y pesan
+alrededor del 1 % de lo que pesan las hembras. Justo antes de la madurez
+sexual, los machos se amputan voluntariamente uno de sus dos
+pedipalpos. ¿Podría esto permitirles moverse más rápido?
+
+Enlace a los datos:
+<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap03e2SpiderAmputation.csv>
+
+-   [Lee el estudio](https://www.pnas.org/content/101/14/4883)
+
+<i class="fa fa-key"></i> Pista: puedes leer los datos directamente
+desde el enlace, así:
+
+```{r eval = F}
+data <- read.csv("https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap03e2SpiderAmputation.csv")
+```
+
+```{r analyse-dataset}
+
+```
+
+::: {style="background-color: #86CBBB; 1px; height:3px "}
+:::
+
+<br>

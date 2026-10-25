@@ -1033,7 +1033,7 @@ edad, un tamaño de la cabeza de entre 80 y 94 mm se considera normal en
 madres no infectadas.
 
 Enlace a los datos:
-<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02e2bZikaBiparietalDiameter.csv>
+<https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap02e2bZikaBiparietalDiameter.csv>
 
 -   [Lee el estudio](https://www.nejm.org/doi/full/10.1056/nejmoa1602412)
 
@@ -1048,7 +1048,7 @@ de hemoglobina de personas de estas tres poblaciones y de un grupo
 control de hombres que viven al nivel del mar en EE. UU.
 
 Enlace a los datos:
-<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02e3bHumanHemoglobinElevation.csv>
+<https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap02e3bHumanHemoglobinElevation.csv>
 
 -   [Lee el estudio](https://www.pnas.org/doi/10.1073/pnas.252649199)
 
@@ -1060,7 +1060,7 @@ por la luz que las polillas de zonas sin contaminación lumínica. Esto
 sugiere una adaptación evolutiva a la luz artificial nocturna.
 
 Enlace a los datos:
-<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02q15MothsToLight.csv>
+<https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap02q15MothsToLight.csv>
 
 -   [Lee el estudio](https://royalsocietypublishing.org/doi/10.1098/rsbl.2016.0111)
 
@@ -1075,7 +1075,7 @@ grupo de personas sin ella, en una prueba con patrones rítmicos
 temporales parecidos al código Morse.
 
 Enlace a los datos:
-<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02q10Synesthetes.csv>
+<https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap02q10Synesthetes.csv>
 
 -   [Lee el estudio](https://www.sciencedirect.com/science/article/pii/S0960982208007343)
 
@@ -1088,7 +1088,7 @@ la nutrición normal, y a otros 17 macacos (8 hembras y 9 machos) con una
 dieta nutritiva normal.
 
 Enlace a los datos:
-<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap02q35FoodReductionLifespan.csv>
+<https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap02q35FoodReductionLifespan.csv>
 
 -   [Lee el estudio](https://www.nature.com/articles/nature11432)
 
@@ -1103,7 +1103,7 @@ el porcentaje de tiempo que estos machos y los machos control pasaban
 acurrucados junto a una hembra (como medida de monogamia).
 
 Enlace a los datos:
-<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap03q15VasopressinVoles.csv>
+<https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap03q15VasopressinVoles.csv>
 
 -   [Lee el estudio](https://www.nature.com/articles/nature02539)
 
@@ -1115,15 +1115,22 @@ sexual, los machos se amputan voluntariamente uno de sus dos
 pedipalpos. ¿Podría esto permitirles moverse más rápido?
 
 Enlace a los datos:
-<https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap03e2SpiderAmputation.csv>
+<https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap03e2SpiderAmputation.csv>
 
 -   [Lee el estudio](https://www.pnas.org/content/101/14/4883)
 
-<i class="fa fa-key"></i> Pista: puedes leer los datos directamente
-desde el enlace, así:
+<i class="fa fa-key"></i> Pista: los archivos de datos están en la carpeta
+`datos` que se descomprime con el zip de la práctica, así que puedes
+leerlos directamente, por ejemplo:
 
 ```{r eval = F}
-data <- read.csv("https://raw.githubusercontent.com/marta-coronado/TAB-data-figs/refs/heads/main/P2_datasets/chap03e2SpiderAmputation.csv")
+data <- read.csv("datos/chap03e2SpiderAmputation.csv")
+```
+
+También puedes leerlos desde el enlace de cada conjunto de datos:
+
+```{r eval = F}
+data <- read.csv("https://raw.githubusercontent.com/marta-coronado/semillero_COBIFMAP/main/semillero2/practica/datos/chap03e2SpiderAmputation.csv")
 ```
 
 ```{r analyse-dataset}

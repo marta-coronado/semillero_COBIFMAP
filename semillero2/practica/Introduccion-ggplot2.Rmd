@@ -134,7 +134,9 @@ Tienes dos opciones para trabajar con R y RStudio:
 -   **Usar RStudio en la nube** con [Posit Cloud](https://posit.cloud/),
     sin instalar nada. Solo hay que registrarse (es gratuito), crear un
     proyecto nuevo (`New Project` \> `New RStudio Project`) y subir el
-    archivo `practica-ggplot2.zip` con el botón `Upload` del panel
+    archivo `practica-ggplot2.zip` (disponible
+    [aquí](https://marta-coronado.github.io/semillero_COBIFMAP/semillero2/practica/practica-ggplot2.zip))
+    con el botón `Upload` del panel
     *Files*. Posit Cloud descomprime el zip automáticamente: tendrás este
     documento y la carpeta `img` con las imágenes que necesita.
 
